@@ -1,6 +1,7 @@
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const { config } = require('dotenv');
 const fs = require('fs');
+const express = require('express');  // Import express
 
 config(); // Load .env file
 
@@ -30,11 +31,10 @@ client.on('ready', () => {
     console.log(`✅ Logged in as ${client.user.tag}`);
 });
 
+// Command handler for bot
 client.on('messageCreate', async message => {
-    // If the message is from a bot or doesn't start with the prefix, ignore it
     if (message.author.bot || !message.content.startsWith(PREFIX)) return;
 
-    // Split message content and retrieve the command name
     const args = message.content.slice(PREFIX.length).trim().split(/\s+/);
     const commandName = args.shift().toLowerCase();
     const command = client.commands.get(commandName);
@@ -49,4 +49,22 @@ client.on('messageCreate', async message => {
     }
 });
 
+// Bot login
 client.login(process.env.TOKEN);
+
+// -----------------------------------
+// Express HTTP server to keep bot alive
+// -----------------------------------
+
+const app = express();
+
+// Simple route to keep bot alive
+app.get('/', (req, res) => {
+    res.send('Bot is running');
+});
+
+// Start HTTP server on a specific port (Railway will set the port automatically in production)
+const PORT = process.env.PORT || 3000;  // Use the port provided by Railway or default to 3000
+app.listen(PORT, () => {
+    console.log(`Server is listening on port ${PORT}`);
+});
