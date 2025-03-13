@@ -1,0 +1,7 @@
+commands/
+node_modules/
+.env
+index.js
+package.json
+package-lock.json
+README.md
