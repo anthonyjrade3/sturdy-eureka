@@ -18,7 +18,9 @@ module.exports = {
                     { name: '+kick', value: 'Kicks a user from the server' },
                     { name: '+avatar', value: 'Get a user’s avatar' },
                     { name: '+weather', value: 'Get the weather for a location' },
-                    { name: '+ping', value: 'The ping of the bot' }
+                    { name: '+ping', value: 'The ping of the bot' },
+                    { name: '+timeout', value: 'Timeouts a user for a specified duration (10s, 1m, 2h, etc.' },
+                    { name: '+untimeout', value: 'Untimeouts a user in the server' }
                 )
                 .setTimestamp()
                 .setFooter({ text: 'Bot created by anthony' });
