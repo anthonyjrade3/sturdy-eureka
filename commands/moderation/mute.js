@@ -1,30 +1,56 @@
-const { EmbedBuilder } = require('discord.js');
-
 module.exports = {
     name: 'mute',
-    description: 'Mutes a user in the server',
+    description: 'Mutes a user for a specified duration (10s, 1m, 2h, etc.)',
     async execute(message, args) {
         // Check if the user has permission to mute members
         if (!message.member.permissions.has('MUTE_MEMBERS')) {
             return message.reply('❌ You don’t have permission to mute members!');
         }
 
-        // Check if a user was mentioned
-        const member = message.mentions.members.first();
-        if (!member) return message.reply('❌ Mention a user to mute!');
+        // Check if a valid duration was provided
+        const duration = args[0];
+        if (!duration) return message.reply('❌ You must specify a duration! For example: 10s, 1m, 2h, etc.');
 
-        // Check if the bot has permission to mute the member
-        if (!member.manageable) {
-            return message.reply('❌ I do not have permission to mute this member!');
+        // Regular expression to match time formats (10s, 1m, 2h, 1d)
+        const timeRegex = /^(\d+)(s|m|h|d)$/;
+        const match = duration.match(timeRegex);
+
+        if (!match) return message.reply('❌ Invalid duration format! Use something like: 10s, 1m, 2h, etc.');
+
+        // Parse the duration and convert to milliseconds
+        const amount = parseInt(match[1], 10);
+        const unit = match[2];
+
+        let muteDuration;
+
+        switch (unit) {
+            case 's': // Seconds
+                muteDuration = amount * 1000;
+                break;
+            case 'm': // Minutes
+                muteDuration = amount * 60 * 1000;
+                break;
+            case 'h': // Hours
+                muteDuration = amount * 60 * 60 * 1000;
+                break;
+            case 'd': // Days
+                muteDuration = amount * 24 * 60 * 60 * 1000;
+                break;
+            default:
+                return message.reply('❌ Invalid time unit! Use s, m, h, or d.');
         }
 
-        // Set the maximum mute duration to 2 weeks (in milliseconds)
-        const muteDuration = 1209600000; // 2 weeks in milliseconds
+        // Check if the mute duration is within the allowed range (10 seconds to 2 weeks)
+        if (muteDuration < 10000) {
+            muteDuration = 10000; // Set minimum to 10 seconds
+        } else if (muteDuration > 1209600000) {
+            muteDuration = 1209600000; // Set maximum to 2 weeks
+        }
 
-        // Timeout (Mute) the user for 2 weeks
+        // Mute the member (the user who called the command will be muted)
         try {
-            await member.timeout(muteDuration, 'Muted by bot for 2 weeks');
-            message.reply(`✅ Muted ${member.user.tag} for 2 weeks.`);
+            await message.member.timeout(muteDuration, `Muted for ${muteDuration / 1000} seconds by bot`);
+            message.reply(`✅ You have been muted for ${muteDuration / 1000} seconds.`);
         } catch (error) {
             console.error(error);
             message.reply('❌ An error occurred while trying to mute the user!');
