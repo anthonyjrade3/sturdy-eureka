@@ -4,7 +4,6 @@ module.exports = {
     name: 'help',
     description: 'Displays a list of all available commands',
     execute(message, args) {
-        // Create the embed message using EmbedBuilder
         try {
             const embed = new EmbedBuilder()
                 .setColor('#0099ff')
@@ -18,12 +17,12 @@ module.exports = {
                     { name: '+ban', value: 'Bans a user from the server' },
                     { name: '+kick', value: 'Kicks a user from the server' },
                     { name: '+avatar', value: 'Get a user’s avatar' },
-                    { name: '+weather', value: 'Get the weather for a location' }
+                    { name: '+weather', value: 'Get the weather for a location' },
+                    { name: '+ping', value: 'The ping of the bot' }
                 )
                 .setTimestamp()
                 .setFooter({ text: 'Bot created by anthony' });
 
-            // Send the embed to the channel
             message.channel.send({ embeds: [embed] });
         } catch (error) {
             console.error('Error executing help command:', error);
