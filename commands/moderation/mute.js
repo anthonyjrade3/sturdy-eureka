@@ -7,8 +7,12 @@ module.exports = {
             return message.reply('❌ You don’t have permission to mute members!');
         }
 
+        // Check if a user was mentioned or if username is provided
+        const member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
+        if (!member) return message.reply('❌ Please mention a valid user or provide a username!');
+
         // Check if a valid duration was provided
-        const duration = args[0];
+        const duration = args[1];
         if (!duration) return message.reply('❌ You must specify a duration! For example: 10s, 1m, 2h, etc.');
 
         // Regular expression to match time formats (10s, 1m, 2h, 1d)
@@ -47,10 +51,10 @@ module.exports = {
             muteDuration = 1209600000; // Set maximum to 2 weeks
         }
 
-        // Mute the member (the user who called the command will be muted)
+        // Mute the user
         try {
-            await message.member.timeout(muteDuration, `Muted for ${muteDuration / 1000} seconds by bot`);
-            message.reply(`✅ You have been muted for ${muteDuration / 1000} seconds.`);
+            await member.timeout(muteDuration, `Muted for ${muteDuration / 1000} seconds by bot`);
+            message.reply(`✅ Muted ${member.user.tag} for ${muteDuration / 1000} seconds.`);
         } catch (error) {
             console.error(error);
             message.reply('❌ An error occurred while trying to mute the user!');
