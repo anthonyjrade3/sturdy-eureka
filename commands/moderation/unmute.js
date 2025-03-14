@@ -22,7 +22,7 @@ module.exports = {
             message.reply(`✅ Successfully unmuted ${member.user.tag}`);
         } catch (error) {
             console.error(error);
-            message.reply('❌ An error occurred while trying to unmute the user!');
+            message.reply('❌ An error occurred while trying to unmute the user pls try again!');
         }
     }
 };
