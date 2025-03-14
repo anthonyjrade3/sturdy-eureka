@@ -7,7 +7,7 @@ module.exports = {
         const pingEmbed = new EmbedBuilder()
             .setColor('#7F527F') // Your bot's role color
             .setTitle('🏓 Pong!')
-            .setDescription(`Latency: **${Date.now() - message.createdTimestamp}ms**\nAPI Latency: **${Math.round(message.client.ws.ping)}ms**`)
+            .setDescription(`Latency: **${Date.now() - message.createdTimestamp}ms**`)
             .setTimestamp()
             .setFooter({ text: `Requested by ${message.author.tag}`, iconURL: message.author.displayAvatarURL() });
 
