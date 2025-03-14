@@ -1,3 +1,5 @@
+const { EmbedBuilder } = require('discord.js');
+
 module.exports = {
     name: 'mute',
     description: 'Mutes a user in the server',
@@ -16,10 +18,11 @@ module.exports = {
             return message.reply('❌ I do not have permission to mute this member!');
         }
 
-        // Mute the user
+        // Timeout (Mute) the user for a set duration (e.g., 10 minutes)
         try {
-            await member.timeout(0, 'Muted by bot'); // Timeout for mute functionality
-            message.reply(`✅ Muted ${member.user.tag}`);
+            // Set mute timeout (change 600000 to the desired time in ms)
+            await member.timeout(600000, 'Muted by bot');
+            message.reply(`✅ Muted ${member.user.tag} for 10 minutes.`);
         } catch (error) {
             console.error(error);
             message.reply('❌ An error occurred while trying to mute the user!');
