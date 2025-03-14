@@ -1,10 +1,10 @@
 module.exports = {
-    name: 'mute',
-    description: 'Mutes a user for a specified duration (10s, 1m, 2h, etc.)',
+    name: 'timeout',
+    description: 'Timeouts a user for a specified duration (10s, 1m, 2h, etc.)',
     async execute(message, args) {
-        // Check if the user has permission to mute members
-        if (!message.member.permissions.has('MUTE_MEMBERS')) {
-            return message.reply('❌ You don’t have permission to mute members!');
+        // Check if the user has permission to timeout members
+        if (!message.member.permissions.has('timeout_MEMBERS')) {
+            return message.reply('❌ You don’t have permission to timeout members!');
         }
 
         // Check if a user was mentioned or if username is provided
@@ -25,39 +25,39 @@ module.exports = {
         const amount = parseInt(match[1], 10);
         const unit = match[2];
 
-        let muteDuration;
+        let timeoutDuration;
 
         switch (unit) {
             case 's': // Seconds
-                muteDuration = amount * 1000;
+                timeoutDuration = amount * 1000;
                 break;
             case 'm': // Minutes
-                muteDuration = amount * 60 * 1000;
+                timeoutDuration = amount * 60 * 1000;
                 break;
             case 'h': // Hours
-                muteDuration = amount * 60 * 60 * 1000;
+                timeoutDuration = amount * 60 * 60 * 1000;
                 break;
             case 'd': // Days
-                muteDuration = amount * 24 * 60 * 60 * 1000;
+                timeoutDuration = amount * 24 * 60 * 60 * 1000;
                 break;
             default:
                 return message.reply('❌ Invalid time unit! Use s, m, h, or d.');
         }
 
-        // Check if the mute duration is within the allowed range (10 seconds to 2 weeks)
-        if (muteDuration < 10000) {
-            muteDuration = 10000; // Set minimum to 10 seconds
-        } else if (muteDuration > 1209600000) {
-            muteDuration = 1209600000; // Set maximum to 2 weeks
+        // Check if the timeout duration is within the allowed range (10 seconds to 2 weeks)
+        if (timeoutDuration < 10000) {
+            timeoutDuration = 10000; // Set minimum to 10 seconds
+        } else if (timeoutDuration > 1209600000) {
+            timeoutDuration = 1209600000; // Set maximum to 2 weeks
         }
 
-        // Mute the user
+        // timeout the user
         try {
-            await member.timeout(muteDuration, `Muted for ${muteDuration / 1000} seconds by bot`);
-            message.reply(`✅ Muted ${member.user.tag} for ${muteDuration / 1000} seconds.`);
+            await member.timeout(timeoutDuration, `timeoutd for ${timeoutDuration / 1000} seconds by bot`);
+            message.reply(`✅ timeoutd ${member.user.tag} for ${timeoutDuration / 1000} seconds.`);
         } catch (error) {
             console.error(error);
-            message.reply('❌ An error occurred while trying to mute the user!');
+            message.reply('❌ An error occurred while trying to timeout the user!');
         }
     }
 };
