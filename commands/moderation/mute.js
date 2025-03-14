@@ -18,11 +18,13 @@ module.exports = {
             return message.reply('❌ I do not have permission to mute this member!');
         }
 
-        // Timeout (Mute) the user for a set duration (e.g., 10 minutes)
+        // Set the maximum mute duration to 2 weeks (in milliseconds)
+        const muteDuration = 1209600000; // 2 weeks in milliseconds
+
+        // Timeout (Mute) the user for 2 weeks
         try {
-            // Set mute timeout (change 600000 to the desired time in ms)
-            await member.timeout(600000, 'Muted by bot');
-            message.reply(`✅ Muted ${member.user.tag} for 10 minutes.`);
+            await member.timeout(muteDuration, 'Muted by bot for 2 weeks');
+            message.reply(`✅ Muted ${member.user.tag} for 2 weeks.`);
         } catch (error) {
             console.error(error);
             message.reply('❌ An error occurred while trying to mute the user!');
