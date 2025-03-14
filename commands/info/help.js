@@ -23,7 +23,7 @@ module.exports = {
                     { name: '+untimeout', value: 'Untimeouts a user in the server' }
                 )
                 .setTimestamp()
-                .setFooter({ text: 'Bot created by anthony' });
+                .setFooter({ text: 'Licky Utilities' });
 
             message.channel.send({ embeds: [embed] });
         } catch (error) {
