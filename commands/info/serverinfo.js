@@ -1,12 +1,18 @@
 const { EmbedBuilder } = require('discord.js');
-const moment = require('moment'); // Install this package with "npm install moment"
+const moment = require('moment');
 
 module.exports = {
     name: 'serverinfo',
     description: 'Displays information about the server',
     execute(message) {
         const { guild } = message;
-        const createdAt = moment(guild.createdAt).fromNow(); // "4 months ago", "2 years ago", etc.
+        const createdAt = moment(guild.createdAt).fromNow();
+
+        // Categorize channels
+        const categories = guild.channels.cache.filter(ch => ch.type === 4).size; // Category channels
+        const textChannels = guild.channels.cache.filter(ch => ch.type === 0).size; // Text channels
+        const voiceChannels = guild.channels.cache.filter(ch => ch.type === 2).size; // Voice channels
+        const totalChannels = textChannels + voiceChannels; // Count without categories
 
         const embed = new EmbedBuilder()
             .setColor('#0099ff')
@@ -17,7 +23,9 @@ module.exports = {
                 { name: '👤 Owner', value: `<@${guild.ownerId}>`, inline: true },
                 { name: '🆔 Server ID', value: guild.id, inline: true },
                 { name: '👥 Members', value: `${guild.memberCount}`, inline: true },
-                { name: '💬 Channels', value: `${guild.channels.cache.size}`, inline: true },
+                { name: '📂 Categories', value: `${categories}`, inline: true },
+                { name: '💬 Text Channels', value: `${textChannels}`, inline: true },
+                { name: '🔊 Voice Channels', value: `${voiceChannels}`, inline: true },
                 { name: '🌍 Region', value: guild.preferredLocale || 'Unknown', inline: true }
             )
             .setTimestamp()
